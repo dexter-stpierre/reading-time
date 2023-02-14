@@ -1,10 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { Button } from './components/Button'
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
+      <Text>This is something I wrote</Text>
+      <Button onPress={() => alert('button has been pressed')}>
+        <Text>Add a new book</Text>
+      </Button>
       <StatusBar style="auto" />
     </View>
   );
