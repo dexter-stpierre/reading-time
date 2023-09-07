@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, View } from 'react-native'
-import { Button } from './components/Button'
 import {
   Link,
   NativeRouter,
@@ -14,13 +13,13 @@ import { Book } from './pages/Book'
 import React, { PropsWithChildren, useMemo } from 'react'
 import { NewBook } from './pages/NewBook'
 import { PaperProvider, MD3DarkTheme } from 'react-native-paper'
-import {
-  BottomNavigation,
-  Text,
-  BottomNavigationProps,
-} from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useStyles } from './hooks/useStyles'
+import {
+  BottomNavigation,
+  BottomNavigationProps,
+} from './components/BottomNavigation'
 
 export default function App() {
   return (
@@ -39,8 +38,8 @@ export default function App() {
               <Text>Open up App.js to start working on your app!</Text>
               <Text>This is something I wrote</Text>
             </View>
-            <Navigation />
           </AppWrapper>
+          <Navigation />
         </PaperProvider>
       </NativeRouter>
     </SafeAreaProvider>
@@ -73,7 +72,7 @@ const AppWrapper = ({ children }: PropsWithChildren) => {
   return <SafeAreaView style={styles.container}>{children}</SafeAreaView>
 }
 
-const routes: BottomNavigationProps<any>['navigationState']['routes'] = [
+const routes: BottomNavigationProps['navigationState']['routes'] = [
   {
     key: '/list',
     title: 'List',
@@ -96,19 +95,24 @@ const Navigation = () => {
     return routes.findIndex((route) => route.key === location.pathname)
   }, [location.pathname])
 
-  const handleTabPress: BottomNavigationProps<any>['onTabPress'] = ({
+  const handleTabPress: BottomNavigationProps['onTabPress'] = ({
     route,
     preventDefault,
   }) => {
     preventDefault()
-    navigate(route.key)
+    // navigate(route.key)
   }
 
   return (
     <View style={navigationStyles.container}>
-      <BottomNavigation.Bar
+      <BottomNavigation
         navigationState={{ index, routes }}
         onTabPress={handleTabPress}
+        renderTouchable={(route) => (
+          <Link {...route} style={route.style} to={route.key}>
+            {route.children}
+          </Link>
+        )}
       />
     </View>
   )
