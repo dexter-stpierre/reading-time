@@ -1,16 +1,33 @@
 import { useState } from 'react'
-import { TextInput, View } from 'react-native'
+import { View } from 'react-native'
+import { TextInput } from './TextInput'
+import { useStyles } from '../hooks/useStyles'
 
 export const NewBookForm = () => {
   const [author, setAuthor] = useState('')
+  const [title, setTitle] = useState('')
+  const [pages, setPages] = useState('')
+
+  const styles = useStyles((theme) => ({
+    view: {
+      width: '100%',
+      padding: 16,
+    },
+  }))
 
   return (
-    <View>
+    <View style={styles.view}>
       <TextInput
-        style={{ height: 40 }}
-        placeholder='Author'
-        onChangeText={(newAuthor) => setAuthor(newAuthor)}
-        defaultValue={author}
+        label='Author'
+        onChangeText={setAuthor}
+        value={author}
+      />
+      <TextInput label='Title' onChangeText={setTitle} value={title} />
+      <TextInput
+        keyboardType='number-pad'
+        label='Pages'
+        onChangeText={setPages}asdf
+        value={pages}
       />
     </View>
   )

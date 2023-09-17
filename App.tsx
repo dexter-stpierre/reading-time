@@ -1,18 +1,17 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, View } from 'react-native'
+import { Appearance, StyleSheet, View } from 'react-native'
 import {
   Link,
   NativeRouter,
   Route,
   Routes,
   useLocation,
-  useNavigate,
 } from 'react-router-native'
 import { List } from './pages/List'
 import { Book } from './pages/Book'
 import React, { PropsWithChildren, useMemo } from 'react'
 import { NewBook } from './pages/NewBook'
-import { PaperProvider, MD3DarkTheme } from 'react-native-paper'
+import { PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper'
 import { Text } from 'react-native-paper'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { useStyles } from './hooks/useStyles'
@@ -22,22 +21,21 @@ import {
 } from './components/BottomNavigation'
 
 export default function App() {
+  const colorScheme = Appearance.getColorScheme()
+  const theme = colorScheme === 'light' ? MD3LightTheme : MD3DarkTheme
+
   return (
     <SafeAreaProvider style={styles.safeArea}>
       <NativeRouter>
-        <PaperProvider theme={MD3DarkTheme}>
+        <PaperProvider theme={theme}>
           <StatusBar style='auto' />
           <AppWrapper>
-            <View>
-              <Routes>
-                <Route path='/' element={<Text>Hello World</Text>} />
-                <Route path='/list' element={<List />} />
-                <Route path='/book' element={<Book />} />
-                <Route path='/new-book' element={<NewBook />} />
-              </Routes>
-              <Text>Open up App.js to start working on your app!</Text>
-              <Text>This is something I wrote</Text>
-            </View>
+            <Routes>
+              <Route path='/' element={<Text>Hello World</Text>} />
+              <Route path='/list' element={<List />} />
+              <Route path='/book' element={<Book />} />
+              <Route path='/new-book' element={<NewBook />} />
+            </Routes>
           </AppWrapper>
           <Navigation />
         </PaperProvider>
@@ -62,6 +60,7 @@ const styles = StyleSheet.create({
 const AppWrapper = ({ children }: PropsWithChildren) => {
   const styles = useStyles((theme) => ({
     container: {
+      width: '100%',
       backgroundColor: theme.colors.surface,
       flex: 1,
       alignItems: 'center',
@@ -88,7 +87,6 @@ const routes: BottomNavigationProps['navigationState']['routes'] = [
 ]
 
 const Navigation = () => {
-  const navigate = useNavigate()
   const location = useLocation()
 
   const index = useMemo(() => {
@@ -96,11 +94,9 @@ const Navigation = () => {
   }, [location.pathname])
 
   const handleTabPress: BottomNavigationProps['onTabPress'] = ({
-    route,
     preventDefault,
   }) => {
     preventDefault()
-    // navigate(route.key)
   }
 
   return (
